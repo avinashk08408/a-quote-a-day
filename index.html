@@ -1144,6 +1144,32 @@ body::after {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+  .discussions-banner {
+  text-align: center;
+  padding: 10px 14px 14px;
+  background: var(--deep);
+}
+
+.discussions-banner a {
+  display: inline-block;
+  font-family: var(--sans);
+  font-weight: 700;
+  letter-spacing: 2px;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  box-shadow: var(--shadow-gold);
+  transition: all 0.25s ease;
+}
+
+.discussions-banner a:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
 </style>
 </head>
 <body>
@@ -1171,7 +1197,13 @@ body::after {
     <button class="quick-tab" data-tab="authors">Authors</button>
     <button class="quick-tab" data-tab="contributors">Contributors</button>
     <button class="quick-tab" data-tab="departments">Departments</button>
-  </nav>
+  
+</nav>
+<div class="discussions-banner">
+  <a href="https://andrewveda.github.io/SRM-VEC-English-PWA/buttons/vox-forum" target="_blank">
+    💬 Discussions · Vox Forum
+  </a>
+</div>
 </header>
 
 <!-- ─── DIRECTORY BACKDROP ─── -->
