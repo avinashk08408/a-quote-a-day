@@ -1,7 +1,7 @@
 ---
 quote: The world isn’t perfect. But it’s there for us, doing the best it can.
 author: Roy Mustang
-contributor: avi
+contributor: Avi
 department: Cyber Security
 date: 2026-03-28
 source: Fullmetal Alchemist: Brotherhood(anime)
