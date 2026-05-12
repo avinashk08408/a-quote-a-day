@@ -1798,69 +1798,14 @@ function openDeck(quotes, startIdx) {
           <button class="dc-btn dc-btn-img">📸 Share</button>
           <a class="dc-btn" href="https://andrewveda.github.io/a-quote-a-day/submissions" target="_blank">✏️ Add a Quote</a>
         </div>
-       <div class="dc-giscus-wrap">
-  <div class="giscus"></div>
+<div class="dc-giscus-wrap">
+  <div class="giscus-mount"></div> <!-- Changed from class="giscus" -->
+</div>
 </div>
       </div>`;
-loadGiscusForCurrentQuote();
-    function loadGiscusForCurrentQuote() {
-  const slide = document.querySelectorAll('.deck-slide')[_deckIdx];
-  if (!slide) return;
 
-  const container = slide.querySelector('.giscus');
-  if (!container) return;
-
-  container.innerHTML = '';
-
-  const globalNum =
-    allQuotes.findIndex(p =>
-      p.quote === _deckQuotes[_deckIdx].quote &&
-      p.contributor === _deckQuotes[_deckIdx].contributor
-    ) + 1;
-
-  const script = document.createElement('script');
-
-  script.src = 'https://giscus.app/client.js';
-  script.async = true;
-  script.crossOrigin = 'anonymous';
-
-  script.setAttribute('data-repo', 'andrewveda/a-quote-a-day');
-  script.setAttribute('data-repo-id', 'R_kgDORI8-yw');
-  script.setAttribute('data-category', 'General');
-  script.setAttribute('data-category-id', 'DIC_kwDORI8-y84C1-Jq');
-  script.setAttribute('data-mapping', 'specific');
-  script.setAttribute('data-term', `Quote #${globalNum}`);
-  script.setAttribute('data-strict', '1');
-  script.setAttribute('data-reactions-enabled', '1');
-  script.setAttribute('data-emit-metadata', '0');
-  script.setAttribute('data-input-position', 'top');
-  script.setAttribute('data-theme', 'preferred_color_scheme');
-  script.setAttribute('data-lang', 'en');
-
-  container.appendChild(script);
-}
-    slide.querySelector('.dc-btn-wa').addEventListener('click', () => {
-      _currentShareQuote = q; shareToWhatsApp();
-    });
-    slide.querySelector('.dc-btn-img').addEventListener('click', () => {
-      _currentShareQuote = q; shareAsImage();
-    });
-
-    track.appendChild(slide);
-  const giscusScript = slide.querySelector('script[src="https://giscus.app/client.js"]');
-
-if (giscusScript) {
-  const newScript = document.createElement('script');
-
-  Array.from(giscusScript.attributes).forEach(attr => {
-    newScript.setAttribute(attr.name, attr.value);
   });
 
-  giscusScript.replaceWith(newScript);
-}
-  });
-
-  // Build dots
   const dotsWrap = document.getElementById('deckDots');
   dotsWrap.innerHTML = '';
   if (quotes.length > 1) {
@@ -1941,9 +1886,50 @@ document.addEventListener('keydown', e => {
   }, { passive: true });
 })();
 
-/* ══════════════════════════════════════════════
-   HELPERS
-   ══════════════════════════════════════════════ */
+function loadGiscusForCurrentQuote() {
+  // 1. Clear out inactive Giscus iframes to save memory and prevent DOM conflicts
+  document.querySelectorAll('.giscus-mount').forEach(el => {
+    el.innerHTML = '';
+    el.classList.remove('giscus'); 
+  });
+
+  // 2. Locate the active slide and its mount point
+  const slide = document.querySelectorAll('.deck-slide')[_deckIdx];
+  if (!slide) return;
+
+  const container = slide.querySelector('.giscus-mount');
+  if (!container) return;
+
+  // 3. Add the 'giscus' class ONLY to the active container so client.js finds it
+  container.classList.add('giscus');
+
+  // 4. Calculate the global quote number
+  const globalNum = allQuotes.findIndex(p => 
+    p.quote === _deckQuotes[_deckIdx].quote && 
+    p.contributor === _deckQuotes[_deckIdx].contributor
+  ) + 1;
+
+  // 5. Inject the script
+  const script = document.createElement('script');
+  script.src = 'https://giscus.app/client.js';
+  script.async = true;
+  script.crossOrigin = 'anonymous';
+
+  script.setAttribute('data-repo', 'andrewveda/a-quote-a-day');
+  script.setAttribute('data-repo-id', 'R_kgDORI8-yw');
+  script.setAttribute('data-category', 'General');
+  script.setAttribute('data-category-id', 'DIC_kwDORI8-y84C1-Jq');
+  script.setAttribute('data-mapping', 'specific');
+  script.setAttribute('data-term', `Quote #${globalNum}`);
+  script.setAttribute('data-strict', '1');
+  script.setAttribute('data-reactions-enabled', '1');
+  script.setAttribute('data-emit-metadata', '0');
+  script.setAttribute('data-input-position', 'top');
+  script.setAttribute('data-theme', 'preferred_color_scheme');
+  script.setAttribute('data-lang', 'en');
+
+  container.appendChild(script);
+}
 function todayDateStr() {
   const now = new Date();
   const y   = now.getFullYear();
