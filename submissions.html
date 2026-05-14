@@ -1,303 +1,623 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Submit a Quote · A Quote A Day</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=IM+Fell+English:ital@0;1&family=DM+Mono:wght@300;400;500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-      --obsidian: #ffffff;
-      --deep: #faf7f2;
-      --surface: #ffffff;
-      --surface2: #f5efe6;
-
-      --gold: #c9a84c;
-      --gold-light: #e8c97a;
-      --gold-dim: rgba(201,168,76,0.12);
-
-      --text: #2a2a2a;
-      --text-muted: #7a766f;
-      --text-dim: #b0a99f;
-
-      --border: rgba(201,168,76,0.35);
-      --border-dim: rgba(0,0,0,0.06);
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root{
+      --paper:#f8f5ef;
+      --ink:#1c1a16;
+      --muted:#756f68;
+      --ghost:#b8b1a8;
+      --gold:#b8913a;
+      --gold-soft:rgba(184,145,58,0.12);
+      --gold-border:rgba(184,145,58,0.22);
+      --surface:#fff;
 
-    body {
-      font-family: 'DM Mono', monospace;
-      background: var(--obsidian);
-      color: var(--text);
-      line-height: 1.6;
-      min-height: 100vh;
+      --serif:'Cormorant Garamond',serif;
+      --fell:'IM Fell English',serif;
+      --mono:'DM Mono',monospace;
+      --sans:'Jost',sans-serif;
     }
 
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.015'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0.35;
+    body{
+      background:var(--paper);
+      color:var(--ink);
+      font-family:var(--sans);
+      line-height:1.55;
+      min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
     }
 
-    body::after {
-      content:'';
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(circle at top left, rgba(201,168,76,0.08), transparent 60%),
-        radial-gradient(circle at bottom right, rgba(201,168,76,0.05), transparent 65%);
-      pointer-events: none;
-      z-index: 0;
+    a{
+      color:inherit;
     }
 
-    .container {
-      max-width: 820px;
-      margin: 0 auto;
-      padding: 48px 18px 70px;
-      position: relative;
-      z-index: 1;
+    .back{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:20px 32px;
+      text-decoration:none;
+      font-family:var(--mono);
+      font-size:10px;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      color:var(--gold);
     }
 
-    .header {
-      text-align: center;
-      margin-bottom: 36px;
-      padding-bottom: 26px;
-      border-bottom: 1px solid var(--border-dim);
+    .hero{
+      text-align:center;
+      padding:10px 24px 56px;
     }
 
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 36px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      color: var(--gold);
+    .eyebrow{
+      font-family:var(--mono);
+      font-size:9px;
+      letter-spacing:4px;
+      text-transform:uppercase;
+      color:var(--gold);
+      margin-bottom:14px;
     }
 
-    .subtitle {
-      font-size: 15px;
-      color: var(--text-muted);
-      line-height: 1.5;
+    h1{
+      font-family:var(--fell);
+      font-style:italic;
+      font-size:clamp(52px,8vw,88px);
+      font-weight:400;
+      line-height:0.95;
+      letter-spacing:-1px;
+      margin-bottom:18px;
     }
 
-    h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 20px;
-      margin: 44px 0 16px;
-      color: var(--text);
+    h1 span{
+      color:var(--gold);
     }
 
-    h2::before {
-      content:'';
-      display: block;
-      width: 36px;
-      height: 2px;
-      background: linear-gradient(90deg, var(--gold), transparent);
-      margin-bottom: 10px;
+    .hero p{
+      font-family:var(--serif);
+      font-size:20px;
+      color:var(--muted);
+      font-style:italic;
     }
 
-    p {
-      margin: 14px 0;
-      color: var(--text-muted);
-      font-size: 15px;
+    .rule{
+      width:72px;
+      height:1px;
+      margin:28px auto 0;
+      background:linear-gradient(to right,transparent,var(--gold),transparent);
     }
 
-    .card {
-      background: linear-gradient(145deg, #ffffff, #f8f2e8);
-      border: 1px solid var(--border-dim);
-      border-radius: 14px;
-      padding: 22px;
-      margin-top: 14px;
-      box-shadow: 0 10px 28px rgba(0,0,0,0.06);
-      transition: all 0.25s ease;
+    .page{
+      width:min(760px,92%);
+      margin:auto;
+      padding-bottom:100px;
     }
 
-    .card:hover {
-      border-color: var(--gold);
-      box-shadow: 0 14px 36px rgba(201,168,76,0.15);
+    .step{
+      display:grid;
+      grid-template-columns:56px 1fr;
+      gap:28px;
+      padding:42px 0;
+      border-bottom:1px solid var(--gold-border);
     }
 
-    ul {
-      color: var(--text-muted);
-      line-height: 1.7;
-      padding-left: 22px;
-      margin: 14px 0;
+    .num{
+      font-family:var(--fell);
+      font-size:42px;
+      font-style:italic;
+      color:var(--gold);
+      opacity:.45;
+      line-height:1;
     }
 
-    code, pre {
-      display: block;
-      background: var(--surface2);
-      border: 1px solid var(--border-dim);
-      border-radius: 10px;
-      padding: 14px 16px;
-      font-family: 'DM Mono', monospace;
-      font-size: 13px;
-      margin: 14px 0;
-      overflow-x: auto;
-      color: var(--text);
+    .label{
+      font-family:var(--mono);
+      font-size:8px;
+      letter-spacing:3px;
+      text-transform:uppercase;
+      color:var(--gold);
+      margin-bottom:10px;
     }
 
-    .note {
-      background: var(--gold-dim);
-      border-left: 3px solid var(--gold);
-      padding: 14px 16px;
-      margin: 16px 0;
-      border-radius: 6px;
-      font-size: 14px;
-      color: var(--text-muted);
+    h2{
+      font-family:var(--serif);
+      font-size:30px;
+      line-height:1.1;
+      margin-bottom:12px;
     }
 
-    .important-note {
-      background: rgba(122, 0, 25, 0.04);
-      border-left: 3px solid var(--gold);
+    .desc{
+      color:var(--muted);
+      font-size:15px;
+      margin-bottom:18px;
     }
 
-    .copy-btn {
-      background: linear-gradient(135deg, var(--gold), var(--gold-light));
-      color: white;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-size: 11px;
-      cursor: pointer;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-      box-shadow: 0 4px 12px rgba(201,168,76,0.3);
+    .example{
+      background:var(--surface);
+      border:1px solid var(--gold-border);
+      border-radius:14px;
+      padding:18px 20px;
+      margin:14px 0;
     }
 
-    .cta {
-      margin-top: 56px;
-      text-align: center;
+    .example strong{
+      display:block;
+      font-family:var(--mono);
+      font-size:13px;
+      color:var(--ink);
+      margin-bottom:6px;
     }
 
-    .cta a {
-      display: inline-block;
-      padding: 16px 34px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--gold), var(--gold-light));
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      font-size: 12px;
-      box-shadow: 0 6px 18px rgba(201,168,76,0.35);
+    .hint{
+      font-size:11px;
+      color:var(--ghost);
+      letter-spacing:.5px;
     }
 
-    footer {
-      margin-top: 70px;
-      text-align: center;
-      font-size: 11px;
-      letter-spacing: 1.5px;
-      color: var(--text-dim);
-      padding-top: 26px;
-      border-top: 1px solid var(--border-dim);
+    .note{
+      background:var(--gold-soft);
+      border-left:3px solid var(--gold);
+      padding:12px 16px;
+      border-radius:0 10px 10px 0;
+      margin-top:16px;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .code-wrap{
+      position:relative;
+      margin-top:20px;
+    }
+
+    .code{
+      background:#1c1a16;
+      color:#efe7da;
+      border-radius:18px;
+      padding:24px;
+      overflow:auto;
+      font-family:var(--mono);
+      font-size:13px;
+      line-height:1.7;
+    }
+
+    .copy{
+      position:absolute;
+      top:14px;
+      right:14px;
+      border:none;
+      background:rgba(184,145,58,0.16);
+      color:var(--gold);
+      padding:8px 14px;
+      border-radius:999px;
+      cursor:pointer;
+      font-family:var(--mono);
+      font-size:9px;
+      letter-spacing:2px;
+      text-transform:uppercase;
+    }
+
+    .fields{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:20px;
+    }
+
+    .field{
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      padding:14px 16px;
+      background:var(--surface);
+      border:1px solid var(--gold-border);
+      border-radius:12px;
+      font-size:13px;
+    }
+
+    .field strong{
+      font-family:var(--mono);
+      color:var(--gold);
+      font-weight:400;
+    }
+
+    .field span{
+      color:var(--muted);
+      text-align:right;
+    }
+
+    .cta{
+      text-align:center;
+      padding-top:70px;
+    }
+
+    .cta-label{
+      font-family:var(--mono);
+      font-size:9px;
+      letter-spacing:3px;
+      text-transform:uppercase;
+      color:var(--ghost);
+      margin-bottom:18px;
+    }
+
+    .cta-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      text-decoration:none;
+      background:var(--ink);
+      color:#f4efe7;
+      padding:18px 34px;
+      border-radius:999px;
+      font-size:12px;
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+      transition:.25s;
+    }
+
+    .cta-btn:hover{
+      background:var(--gold);
+      transform:translateY(-2px);
+    }
+
+    .cta-sub{
+      margin-top:14px;
+      font-size:11px;
+      color:var(--ghost);
+      font-family:var(--mono);
+      letter-spacing:1px;
+    }
+
+    .pipeline{
+      margin-top:54px;
+      border:1px solid var(--gold-border);
+      background:var(--surface);
+      border-radius:20px;
+      overflow:hidden;
+    }
+
+    .pipe{
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      padding:18px 24px;
+      border-bottom:1px solid var(--gold-border);
+    }
+
+    .pipe:last-child{
+      border-bottom:none;
+    }
+
+    .pipe strong{
+      font-size:14px;
+      font-weight:500;
+    }
+
+    .pipe span{
+      color:var(--muted);
+      font-size:13px;
+      text-align:right;
+    }
+
+    footer{
+      text-align:center;
+      padding:42px 24px;
+      font-family:var(--mono);
+      font-size:9px;
+      letter-spacing:3px;
+      text-transform:uppercase;
+      color:var(--ghost);
+    }
+
+    @media(max-width:700px){
+
+      .back{
+        padding:18px 20px;
+      }
+
+      .hero{
+        padding:0 20px 46px;
+      }
+
+      .hero p{
+        font-size:18px;
+      }
+
+      .step{
+        grid-template-columns:40px 1fr;
+        gap:18px;
+        padding:34px 0;
+      }
+
+      .num{
+        font-size:32px;
+      }
+
+      h2{
+        font-size:24px;
+      }
+
+      .field{
+        flex-direction:column;
+        gap:8px;
+      }
+
+      .field span{
+        text-align:left;
+      }
+
+      .pipe{
+        flex-direction:column;
+        gap:6px;
+      }
+
+      .pipe span{
+        text-align:left;
+      }
+
+      .cta-btn{
+        width:100%;
+        justify-content:center;
+      }
+
+      .code{
+        font-size:12px;
+      }
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
 
-    <div class="header">
-      <h1>Submit a Quote</h1>
-      <p class="subtitle">
-        Inspire us with your favourite quotes.<br>
-        Make us laugh, make us cry, make us think.<br>
-        Stir us to action. Give us something that stays.
-      </p>
-    </div>
+  <a href="../" class="back">← Back to Archive</a>
 
-    <p>
-      Welcome! This guide will walk you through submitting your favorite quote to
-      <strong>A Quote A Day</strong>.
-    </p>
+  <section class="hero">
+    <div class="eyebrow">SRM VEC · English Department</div>
 
-    <h2>Step 1 · Create a New Quote File</h2>
-    <div class="card">
-      <p>Click the golden button at the bottom of this page. GitHub will:</p>
-      <ul>
-        <li>Create your own copy (fork) of the project</li>
-        <li>Open an editor where you can add your quote</li>
-        <li>Guide you through submitting your contribution</li>
-      </ul>
+    <h1>Add Your <span>Quote</span></h1>
 
-      <div class="note">
-        <strong>New to GitHub?</strong> The process is beginner-friendly.
+    <p>Submit a quote and a short reflection.</p>
+
+    <div class="rule"></div>
+  </section>
+
+  <main class="page">
+
+    <!-- STEP 1 -->
+    <section class="step">
+
+      <div class="num">1</div>
+
+      <div>
+        <div class="label">Start</div>
+
+        <h2>Sign in to GitHub</h2>
+
+        <p class="desc">
+          Open GitHub and sign in. Create a free account if needed.
+        </p>
+
       </div>
-    </div>
 
-    <h2>Step 2 · Add Your Quote Content</h2>
-    <div class="card">
-      <p>Copy the template below and fill in your details.</p>
+    </section>
 
-      <button class="copy-btn" onclick="copyTemplate()">Copy Template</button>
+    <!-- STEP 2 -->
+    <section class="step">
 
-<pre id="template">---
-quote: 
-author: 
-what_it_means_to_me: 
-contributor: 
-department: 
-source: 
-tags: 
----</pre>
+      <div class="num">2</div>
 
-      <div class="note">
-        Please complete all fields.
+      <div>
+
+        <div class="label">Name</div>
+
+        <h2>Name the file correctly</h2>
+
+        <p class="desc">
+          Use this format exactly:
+        </p>
+
+        <div class="example">
+          <strong>2024-03-15-sunanda-vk.json</strong>
+          <div class="hint">Date + your name · lowercase · no spaces</div>
+        </div>
+
+        <div class="example">
+          <strong>2024-03-16-arjun-r.json</strong>
+          <div class="hint">Another example</div>
+        </div>
+
+        <div class="note">
+          File must end in <code>.json</code>
+        </div>
+
       </div>
-    </div>
 
-    <h2>Step 3 · Name Your File Correctly</h2>
-    <div class="card">
-      <p>The filename must follow this format:</p>
-      <code>YYYY-MM-DD_yourname_department.md</code>
+    </section>
 
-      <p>Example:</p>
-      <code>2026-02-04_meenz_cyber-security.md</code>
+    <!-- STEP 3 -->
+    <section class="step">
 
-      <div class="note important-note">
-        <strong>Please follow this naming procedure exactly.</strong><br><br>
-        Our system automatically organises quotes based on filenames.  
-        Files that do not follow the prescribed format cannot be processed.
+      <div class="num">3</div>
+
+      <div>
+
+        <div class="label">Paste</div>
+
+        <h2>Fill the template</h2>
+
+        <p class="desc">
+          Copy the template and replace the values.
+        </p>
+
+        <div class="code-wrap">
+
+          <button class="copy" onclick="copyTemplate()">Copy</button>
+
+<pre class="code" id="template">{
+  "quote":       "The quote you love.",
+  "author":      "Quote author.",
+  "contributor": "Your name.",
+  "department":  "Your department.",
+  "about":       "Why this quote matters to you."
+}</pre>
+
+        </div>
+
+        <div class="fields">
+
+          <div class="field">
+            <strong>"quote"</strong>
+            <span>Exact quote.</span>
+          </div>
+
+          <div class="field">
+            <strong>"author"</strong>
+            <span>Quote author.</span>
+          </div>
+
+          <div class="field">
+            <strong>"contributor"</strong>
+            <span>Your name.</span>
+          </div>
+
+          <div class="field">
+            <strong>"department"</strong>
+            <span>Your department.</span>
+          </div>
+
+          <div class="field">
+            <strong>"about"</strong>
+            <span>Why this quote matters to you.</span>
+          </div>
+
+        </div>
+
+        <div class="note">
+          Do not add an <code>"id"</code> field.
+        </div>
+
       </div>
-   
-     <div class="cta">
+
+    </section>
+
+    <!-- STEP 4 -->
+    <section class="step">
+
+      <div class="num">4</div>
+
+      <div>
+
+        <div class="label">Submit</div>
+
+        <h2>Create the Pull Request</h2>
+
+        <p class="desc">
+          Click:
+        </p>
+
+        <div class="example">
+          <strong>1. “Propose new file”</strong>
+          <strong>2. “Create pull request”</strong>
+        </div>
+
+        <div class="note">
+          An automated check will validate your file and comment on the PR.
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+
+      <div class="cta-label">Ready?</div>
+
       <a
         href="https://github.com/AndrewVeda/a-quote-a-day/new/main/quotes"
-        target="_blank">
-        Create Your Quote File on GitHub
+        target="_blank"
+        rel="noopener"
+        class="cta-btn"
+      >
+        ✦ Open GitHub Editor
       </a>
-    </div>
-       </div>
-    <footer>
-      A Quote A Day · Empowering Student Voices
-    </footer>
 
-  </div>
+      <div class="cta-sub">
+        GitHub account required
+      </div>
+
+    </section>
+
+    <!-- PIPELINE -->
+    <section class="pipeline">
+
+      <div class="pipe">
+        <strong>Validation</strong>
+        <span>Automated checks run instantly.</span>
+      </div>
+
+      <div class="pipe">
+        <strong>Review & Merge</strong>
+        <span>A lecturer reviews the submission.</span>
+      </div>
+
+      <div class="pipe">
+        <strong>Site Updates</strong>
+        <span>The archive rebuilds automatically.</span>
+      </div>
+
+      <div class="pipe">
+        <strong>Published Live</strong>
+        <span>Your quote appears on the site.</span>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    A Quote A Day · SRM VEC English Department
+  </footer>
 
   <script>
+
+    const TEMPLATE_RAW = `{
+  "quote":       "The quote you love.",
+  "author":      "Quote author.",
+  "contributor": "Your name.",
+  "department":  "Your department.",
+  "about":       "Why this quote matters to you."
+}`;
+
     function copyTemplate() {
-      const template = document.getElementById('template').textContent;
-      const button = event.target;
 
-      navigator.clipboard.writeText(template).then(() => {
-        button.textContent = 'Copied!';
-        button.style.background = '#3a7d44';
+      navigator.clipboard.writeText(TEMPLATE_RAW);
 
-        setTimeout(() => {
-          button.textContent = 'Copy Template';
-          button.style.background = '';
-        }, 2000);
-      });
+      const btn = document.querySelector('.copy');
+
+      btn.textContent = 'Copied';
+
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+      }, 1500);
+
     }
+
   </script>
+
 </body>
 </html>
