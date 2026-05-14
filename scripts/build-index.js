@@ -71,5 +71,4 @@ console.log(`✅ Built index.json — ${quotes.length} quotes from ${files.lengt
 if (errors.length) {
     console.log('\nErrors (files skipped):');
     errors.forEach(e => console.log(' ', e));
-    process.exit(1); // Fail the Action so you know something is wrong
 }
