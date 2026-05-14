@@ -63,25 +63,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 /* ─── FETCH & PARSE ─── */
 async function fetchArchive() {
     try {
-        const response = await fetch(
-            `https://api.github.com/repos/${CONFIG.REPO}/contents/${CONFIG.DIR}`
-        );
-        if (!response.ok) throw new Error('Network error');
+        // One fetch to raw.githubusercontent.com — no API, no rate limit
+        const url = `https://raw.githubusercontent.com/${CONFIG.REPO}/main/${CONFIG.DIR}/index.json`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-        const files  = await response.json();
-        const mdFiles = files.filter(f => f.name.endsWith('.md'));
+        const data = await response.json();
+        if (!Array.isArray(data) || data.length === 0) throw new Error('Empty archive');
 
-        const promises = mdFiles.map(async (file, i) => {
-            try {
-                const raw = await fetch(file.download_url).then(r => r.text());
-                return parseEntry(raw, file.name, i + 1);
-            } catch { return null; }
-        });
+        DB = data.map(q => ({
+            ...q,
+            date: new Date(q.date),
+            dateStr: q.date,
+            about: q.about || '',
+        }));
 
-        DB = (await Promise.all(promises)).filter(Boolean);
+        // Already sorted by build script but sort defensively
         DB.sort((a, b) => b.date - a.date);
-
-        if (DB.length === 0) throw new Error('Empty archive');
 
         document.getElementById('mastCount').innerText = `${DB.length} Quotes`;
         renderGrid(DB);
@@ -99,31 +97,6 @@ async function fetchArchive() {
         const loader = document.getElementById('loader');
         if (loader) loader.style.display = 'none';
     }
-}
-
-function parseEntry(md, filename, fallbackId) {
-    const match = md.match(/---([\s\S]*?)---/);
-    if (!match) return null;
-
-    const data = {};
-    match[1].split('\n').forEach(line => {
-        const i = line.indexOf(':');
-        if (i !== -1) {
-            data[line.substring(0,i).trim()] = line.substring(i+1).trim();
-        }
-    });
-
-    const dateMatch = filename.match(/^(\d{4}-\d{2}-\d{2})/);
-    return {
-        id:          data.id || fallbackId,
-        quote:       data.quote       || 'Text missing.',
-        author:      data.author      || 'Unknown',
-        contributor: data.contributor || 'Anonymous',
-        department:  data.department  || 'English',
-        about:       data.what_it_means_to_me || data.about || '',
-        date:        new Date(dateMatch ? dateMatch[1] : 0),
-        dateStr:     dateMatch ? dateMatch[1] : 'Unknown',
-    };
 }
 
 /* ─── RENDER GRID ─── */
