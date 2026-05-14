@@ -4,50 +4,76 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
     <title>A Quote A Day | English Dept Archive</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=IM+Fell+English:ital@0;1&family=DM+Mono:wght@300;400;500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <!-- MASTHEAD -->
     <header class="masthead" id="masthead">
-        <div class="masthead-meta">
-            <span id="mastDateline">LOADING...</span>
-            <span class="masthead-edition">Digital Archive</span>
-            <span id="mastCount">0 Quotes</span>
+        <div class="masthead-rule top-rule"></div>
+        <div class="masthead-inner">
+            <div class="masthead-meta">
+                <span id="mastDateline" class="meta-pill">LOADING...</span>
+                <div class="masthead-title-block">
+                    <div class="masthead-eyebrow">Andrew Veda College</div>
+                    <h1 class="masthead-title">A Quote A Day</h1>
+                    <div class="masthead-subtitle">English Department Wisdom Archive</div>
+                </div>
+                <span id="mastCount" class="meta-pill">0 Quotes</span>
+            </div>
         </div>
-        <div class="masthead-title">A Quote A Day</div>
-        <nav class="nav-bar">
-            <button class="quick-tab active" data-tab="all">✦ All</button>
-            <button class="quick-tab" data-tab="authors">Authors</button>
-            <button class="quick-tab" data-tab="contributors">Contributors</button>
-            <button class="quick-tab" data-tab="departments">Depts</button>
+        <div class="masthead-rule bottom-rule"></div>
+        <nav class="nav-bar" id="navBar">
+            <button class="quick-tab active" data-tab="all">All Quotes</button>
+            <button class="quick-tab" data-tab="authors">By Author</button>
+            <button class="quick-tab" data-tab="contributors">By Contributor</button>
+            <button class="quick-tab" data-tab="departments">By Dept</button>
+            <div class="search-wrap">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search quotes, authors…" autocomplete="off"/>
+                <span class="search-icon">⌕</span>
+            </div>
         </nav>
     </header>
 
+    <!-- MAIN GRID -->
     <main class="newspaper-body" id="mainContent">
-        <div id="loader" style="text-align:center; padding:100px;">
-            <div style="font-size:40px;">❦</div>
-            <p style="font-family:monospace; font-size:12px; margin-top:20px; color:#b0a99f; letter-spacing:2px;">TYPESETTING WISDOM...</p>
+        <div id="loader" class="loader-state">
+            <div class="loader-ornament">❦</div>
+            <p class="loader-text">Typesetting Wisdom…</p>
         </div>
     </main>
 
-    <div class="deck-overlay" id="deckOverlay">
+    <!-- DECK OVERLAY -->
+    <div class="deck-overlay" id="deckOverlay" role="dialog" aria-modal="true" aria-label="Quote viewer">
         <div class="deck-topbar">
-            <button id="deckClose">✕</button>
-            <div id="deckCounter">01 / 00</div>
-            <div style="width:32px;"></div>
+            <button class="deck-nav-btn" id="deckClose" aria-label="Close">✕</button>
+            <div class="deck-progress-wrap" id="deckProgressWrap"></div>
+            <div id="deckCounter" class="deck-counter">1 / 1</div>
+        </div>
+        <div class="deck-nav-arrows">
+            <button class="arrow-btn" id="arrowPrev" aria-label="Previous">&#8592;</button>
+            <button class="arrow-btn" id="arrowNext" aria-label="Next">&#8594;</button>
         </div>
         <div class="deck-track-wrap">
             <div class="deck-track" id="deckTrack"></div>
         </div>
     </div>
 
-    <div id="dirBackdrop" class="dir-backdrop"></div>
-    <aside class="dir-panel" id="dirPanel">
+    <!-- DIRECTORY PANEL -->
+    <div class="dir-backdrop" id="dirBackdrop"></div>
+    <aside class="dir-panel" id="dirPanel" role="complementary">
         <div class="dir-header">
-            <h2 id="dirTitle">Directory</h2>
-            <button id="dirClose">✕</button>
+            <h2 id="dirTitle" class="dir-title">Directory</h2>
+            <button id="dirClose" class="dir-close-btn" aria-label="Close directory">✕</button>
         </div>
         <div id="dirList" class="dir-list"></div>
     </aside>
+
+    <!-- SHARE CANVAS (hidden) -->
+    <div id="share-canvas-container" style="position:fixed;left:-9999px;top:0;z-index:-1;"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="app.js"></script>
