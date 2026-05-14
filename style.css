@@ -559,3 +559,108 @@ body {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
 }
+
+/* --- OVERLAY & PROGRESS BAR (Top) --- */
+.deck-overlay {
+    background: rgba(10, 10, 10, 0.85); /* Matches screenshot background dim */
+}
+
+.deck-topbar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 2100;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Progress dots seen in screenshot */
+.progress-container {
+    display: flex;
+    gap: 4px;
+    max-width: 80%;
+    overflow: hidden;
+}
+.progress-dot {
+    width: 6px; height: 6px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    transition: 0.3s;
+}
+.progress-dot.active {
+    background: var(--gold);
+    width: 20px;
+    border-radius: 4px;
+}
+
+/* --- THE FLOATING CARD (Desktop vs Mobile) --- */
+.deck-slide {
+    display: flex;
+    align-items: center; /* Vertical center on desktop */
+    justify-content: center;
+    padding: 60px 20px;
+}
+
+.deck-card {
+    background: var(--surface);
+    border-radius: 30px;
+    max-width: 600px;
+    width: 100%;
+    padding: 50px;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+    /* Mobile Fix: Scrolling inside the card if content is long */
+    max-height: 90vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    position: relative;
+}
+
+/* --- BUTTON ROW (Exact match to screenshot) --- */
+.deck-action-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 30px;
+    justify-content: flex-start;
+}
+
+.btn-action {
+    padding: 10px 18px;
+    border-radius: 20px;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid var(--border);
+    background: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    transition: 0.2s;
+}
+
+.btn-action.discuss {
+    background: linear-gradient(135deg, #d4af37, #f2d06b);
+    color: white;
+    border: none;
+}
+
+@media (max-width: 600px) {
+    .deck-card {
+        padding: 30px 20px;
+        border-radius: 20px;
+        margin-top: 40px; /* Space for the dots */
+    }
+    .dc-quote {
+        font-size: 20px;
+    }
+    .deck-action-row {
+        grid-template-columns: 1fr 1fr;
+        display: grid;
+    }
+}
