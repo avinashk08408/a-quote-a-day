@@ -1904,116 +1904,258 @@ function makeArchiveDateHeader(dateStrOrLabel, count, isLabel = false) {
   return wrap;
 }
 
-/* ══════════════════════════════════════════════
-   DECK VIEWER
-   ══════════════════════════════════════════════ */
 let _deckQuotes         = [];
 let _deckIdx            = 0;
 let _currentShareQuote  = null;
 
 function openModal(q) {
   const pool = _lastRenderedQuotes.length ? _lastRenderedQuotes : allQuotes;
+
   let idx = pool.indexOf(q);
-  if (idx === -1) idx = pool.findIndex(p => p.quote === q.quote && p.contributor === q.contributor);
+
+  if (idx === -1) {
+    idx = pool.findIndex(
+      p => p.quote === q.quote && p.contributor === q.contributor
+    );
+  }
+
   if (idx === -1) idx = 0;
+
   openDeck(pool, idx);
 }
 
 function openDeck(quotes, startIdx) {
   _deckQuotes = quotes;
+
   const track = document.getElementById('deckTrack');
   track.innerHTML = '';
   track.style.transition = 'none';
   track.style.transform  = 'translateX(0)';
 
   quotes.forEach((q, i) => {
-    const slide      = document.createElement('div');
-    slide.className  = 'deck-slide';
-    const globalNum  = allQuotes.findIndex(p => p.quote === q.quote && p.contributor === q.contributor) + 1;
-    const hasAbout   = !!q.about;
-    const term       = giscusTerm(q); // unique giscus term = quote text (≤80 chars)
+    const slide = document.createElement('div');
+    slide.className = 'deck-slide';
 
-    // Giscus discussion URL uses the truncated quote text as search term
-    const discussURL = `https://github.com/AndrewVeda/a-quote-a-day/discussions?discussions_q=${encodeURIComponent(term)}`;
+    const globalNum =
+      allQuotes.findIndex(
+        p => p.quote === q.quote && p.contributor === q.contributor
+      ) + 1;
+
+    const hasAbout = !!q.about;
+
+    const term = giscusTerm(q);
 
     slide.innerHTML = `
       <div class="deck-card">
-        <div class="dc-kicker">Quote #${globalNum} · ${escHtml(formatDateFull(q.dateStr))}</div>
-        <div class="dc-quote">"${escHtml(q.quote)}"</div>
-        <div class="dc-author-name">${escHtml(q.author)}</div>
-        <div class="dc-author-role">Quoted Author</div>
+
+        <div class="dc-kicker">
+          Quote #${globalNum} · ${formatDateFull(q.dateStr)}
+        </div>
+
+        <div class="dc-quote">
+          "${escHtml(q.quote)}"
+        </div>
+
+        <div class="dc-author-name">
+          ${escHtml(q.author)}
+        </div>
+
+        <div class="dc-author-role">
+          Quoted Author
+        </div>
+
         <div class="dc-contrib-box">
-          <div class="dc-contrib-label">Contributed by</div>
-          <div class="dc-contrib-name">${escHtml(q.contributor)}</div>
-          <div class="dc-contrib-dept">${escHtml(q.department || '')}</div>
+          <div class="dc-contrib-label">
+            Contributed by
+          </div>
+
+          <div class="dc-contrib-name">
+            ${escHtml(q.contributor)}
+          </div>
+
+          <div class="dc-contrib-dept">
+            ${escHtml(q.department || '')}
+          </div>
+
           ${hasAbout ? `
             <div class="dc-contrib-divider"></div>
-            <div class="dc-about-label">What this means to me</div>
-            <div class="dc-about-text">${escHtml(q.about)}</div>` : ''}
+
+            <div class="dc-about-label">
+              What this means to me
+            </div>
+
+            <div class="dc-about-text">
+              ${escHtml(q.about)}
+            </div>
+          ` : ''}
         </div>
+
         <div class="dc-actions">
-          <a class="dc-btn primary" href="${discussURL}" target="_blank" rel="noopener">💬 Discuss</a>
-          <button class="dc-btn dc-btn-wa">📲 WhatsApp</button>
-          <button class="dc-btn dc-btn-img">📸 Share</button>
-          <a class="dc-btn" href="https://andrewveda.github.io/a-quote-a-day/submissions" target="_blank">✏️ Add a Quote</a>
+          <a
+            class="dc-btn primary"
+            href="https://github.com/AndrewVeda/a-quote-a-day/discussions?discussions_q=${encodeURIComponent(term)}"
+            target="_blank"
+            rel="noopener"
+          >
+            💬 Discuss
+          </a>
+
+          <button class="dc-btn dc-btn-wa">
+            📲 WhatsApp
+          </button>
+
+          <button class="dc-btn dc-btn-img">
+            📸 Share
+          </button>
+
+          <a
+            class="dc-btn"
+            href="https://andrewveda.github.io/a-quote-a-day/submissions"
+            target="_blank"
+          >
+            ✏️ Add a Quote
+          </a>
         </div>
+
         <div class="dc-giscus-wrap">
-          <div class="giscus-mount" data-term="${escHtml(term)}"></div>
+          <script
+            src="https://giscus.app/client.js"
+            data-repo="andrewveda/cryptic"
+            data-repo-id="R_kgDOQ5jJ1Q"
+            data-category="General"
+            data-category-id="DIC_kwDOQ5jJ1c4C81sX"
+            data-mapping="specific"
+            data-term="${escHtml(term)}"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="top"
+            data-theme="noborder_light"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+          </script>
         </div>
-      </div>`;
+
+      </div>
+    `;
+
+    slide
+      .querySelector('.dc-btn-wa')
+      .addEventListener('click', () => {
+        _currentShareQuote = q;
+        shareToWhatsApp();
+      });
+
+    slide
+      .querySelector('.dc-btn-img')
+      .addEventListener('click', () => {
+        _currentShareQuote = q;
+        shareAsImage();
+      });
+
     track.appendChild(slide);
   });
 
-  // Dots
   const dotsWrap = document.getElementById('deckDots');
   dotsWrap.innerHTML = '';
+
   if (quotes.length > 1) {
     quotes.forEach((_, i) => {
-      const d   = document.createElement('div');
+      const d = document.createElement('div');
+
       d.className = 'deck-dot';
+
       d.addEventListener('click', () => deckGoTo(i));
+
       dotsWrap.appendChild(d);
     });
   }
 
-  document.getElementById('deckOverlay').classList.add('open');
+  document
+    .getElementById('deckOverlay')
+    .classList.add('open');
+
   document.body.style.overflow = 'hidden';
 
   requestAnimationFrame(() => {
-    requestAnimationFrame(() => { deckGoTo(startIdx, false); });
+    requestAnimationFrame(() => {
+      deckGoTo(startIdx, false);
+    });
   });
 }
 
 function deckGoTo(i, animate = true) {
-  const track  = document.getElementById('deckTrack');
-  _deckIdx     = Math.max(0, Math.min(i, _deckQuotes.length - 1));
+  const track = document.getElementById('deckTrack');
+
+  _deckIdx = Math.max(
+    0,
+    Math.min(i, _deckQuotes.length - 1)
+  );
+
   _currentShareQuote = _deckQuotes[_deckIdx];
-  loadGiscusForCurrentQuote();
 
-  track.style.transition = animate ? 'transform 0.38s cubic-bezier(.4,0,.2,1)' : 'none';
-  track.style.transform  = `translateX(-${_deckIdx * 100}%)`;
+  track.style.transition = animate
+    ? 'transform 0.38s cubic-bezier(.4,0,.2,1)'
+    : 'none';
 
-  document.getElementById('deckCounter').textContent = `${_deckIdx + 1} / ${_deckQuotes.length}`;
-  document.querySelectorAll('.deck-dot').forEach((d, j) => d.classList.toggle('active', j === _deckIdx));
+  track.style.transform = `translateX(-${_deckIdx * 100}%)`;
+
+  document.getElementById('deckCounter').textContent =
+    `${_deckIdx + 1} / ${_deckQuotes.length}`;
+
+  document
+    .querySelectorAll('.deck-dot')
+    .forEach((d, j) => {
+      d.classList.toggle('active', j === _deckIdx);
+    });
+
   document.getElementById('deckPrev').disabled = (_deckIdx === 0);
-  document.getElementById('deckNext').disabled = (_deckIdx === _deckQuotes.length - 1);
+
+  document.getElementById('deckNext').disabled =
+    (_deckIdx === _deckQuotes.length - 1);
 }
 
 function closeDeck() {
-  document.getElementById('deckOverlay').classList.remove('open');
+  document
+    .getElementById('deckOverlay')
+    .classList.remove('open');
+
   document.body.style.overflow = '';
 }
 
-document.getElementById('deckClose').addEventListener('click', closeDeck);
-document.getElementById('deckPrev').addEventListener('click',  () => deckGoTo(_deckIdx - 1));
-document.getElementById('deckNext').addEventListener('click',  () => deckGoTo(_deckIdx + 1));
+/* Controls */
+document
+  .getElementById('deckClose')
+  .addEventListener('click', closeDeck);
 
+document
+  .getElementById('deckPrev')
+  .addEventListener('click', () => deckGoTo(_deckIdx - 1));
+
+document
+  .getElementById('deckNext')
+  .addEventListener('click', () => deckGoTo(_deckIdx + 1));
+
+/* Keyboard navigation */
 document.addEventListener('keydown', e => {
-  if (!document.getElementById('deckOverlay').classList.contains('open')) return;
-  if (e.key === 'Escape')     closeDeck();
-  if (e.key === 'ArrowLeft')  deckGoTo(_deckIdx - 1);
-  if (e.key === 'ArrowRight') deckGoTo(_deckIdx + 1);
+  if (!document
+    .getElementById('deckOverlay')
+    .classList.contains('open')) return;
+
+  if (e.key === 'Escape') {
+    closeDeck();
+  }
+
+  if (e.key === 'ArrowLeft') {
+    deckGoTo(_deckIdx - 1);
+  }
+
+  if (e.key === 'ArrowRight') {
+    deckGoTo(_deckIdx + 1);
+  }
 });
+
 
 // Touch swipe
 (function () {
